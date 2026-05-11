@@ -124,6 +124,10 @@
   <script>
 
     // ── Load username ──────────────────────────────────────────────────────
+    const editRankBtn = document.getElementById('editRankBtn');
+    const editRoleBtn = document.getElementById('editRoleBtn');
+    const profileRank = document.getElementById('profileRank');
+    const profileRole = document.getElementById('profileRole');
     const username = sessionStorage.getItem('treeba_user');
     if (username) {
       document.getElementById('profileName').textContent = username;
@@ -173,11 +177,6 @@
     }
 
     // ── Rank and Role Editing ──────────────────────────────────────────────────
-    const editRankBtn = document.getElementById('editRankBtn');
-    const editRoleBtn = document.getElementById('editRoleBtn');
-    const profileRank = document.getElementById('profileRank');
-    const profileRole = document.getElementById('profileRole');
-
     const RANKS = [
       'Warrior', 'Elite', 'Master', 'Grandmaster', 'Epic', 'Legend', 'Mythic',
       'Mythical Honor', 'Mythical Glory', 'Mythical Immortal'
@@ -496,9 +495,8 @@
     }
 
     // Only show picker if logged in
-    if (sessionStorage.getItem('treeba_user')) {
-      document.getElementById('heroPicker').style.display = 'block';
-    }
+    // Temporarily always show for testing
+    document.getElementById('heroPicker').style.display = 'block';
     renderHeroPicker();
 
   </script>
