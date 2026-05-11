@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — TreeBa</title>
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../images/TreeBa.png" alt="TreeBa Logo" class="nav-logo-img">
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="teamfinder.html">Team Finder</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-ghost">Log In</a>
+      <a href="register.html" class="btn-primary">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="logo-icon">🌳</span> TreeBa
+      </div>
+      <h2>Welcome Back</h2>
+      <p>Sign in to your TreeBa account.</p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="username" class="form-input" placeholder="Your username" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" class="form-input" placeholder="Your password" required />
+        </div>
+        <button type="submit" class="btn-primary form-submit">Log In</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="register.html">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Finder — TreeBa</title>
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">
+     <img src="../images/TreeBa.png" alt="TreeBa Logo" class="nav-logo-img">
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="teamfinder.html" class="active">Team Finder</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-ghost">Log In</a>
+      <a href="register.html" class="btn-primary">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="section team-finder-section" style="padding-top:100px;">
+    <div class="section-header">
+      <h2> Team Finder</h2>
+      <p>Find the right teammates for your next match</p>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="team-buttons">
+      <button class="team-btn">👥 Duo</button>
+      <button class="team-btn">👥 Trio</button>
+      <button class="team-btn">🏆 5-Man</button>
+      <button class="team-btn">📈 Rank Push</button>
+      <button class="team-btn">🎮 Casual</button>
+      <button class="team-btn">🛡️ Need Roam</button>
+      <button class="team-btn">🌿 Need Jungle</button>
+      <button class="team-btn">💰 Need Gold Lane</button>
+      <button class="team-btn">🗡️ Need EXP Lane</button>
+      <button class="team-btn">🔮 Need Mid Lane</button>
+    </div>
+
+    <!-- Empty State — no players yet -->
+    <div class="empty-state">
+      <h3>No players looking for a team yet</h3>
+      <p>Sign up and be the first to post your team request!</p>
+      <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;">
+        <a href="register.html" class="btn-primary">Sign Up</a>
+        <a href="community.html" class="btn-ghost">Go to World Chat</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-bottom" style="max-width:1200px;margin:0 auto;">
+      <span>© 2026 TreeBa. Not affiliated with Moonton.</span>
+      <span>Built for the ML community </span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

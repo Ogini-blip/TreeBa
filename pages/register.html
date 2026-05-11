@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — TreeBa</title>
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../images/TreeBa.png" alt="TreeBa Logo" class="nav-logo-img">
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="teamfinder.html">Team Finder</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-ghost">Log In</a>
+      <a href="register.html" class="btn-primary">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="logo-icon">🌳</span> TreeBa
+      </div>
+      <h2>Create Account</h2>
+      <p>Join the ML community. It's free.</p>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="username" class="form-input" placeholder="Your in-game name" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" class="form-input" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" class="form-input" placeholder="Create a password" required />
+        </div>
+        <div class="form-group">
+          <label>Rank</label>
+          <select name="rank" class="form-input">
+            <option value="">Select your rank</option>
+            <option>Warrior</option>
+            <option>Elite</option>
+            <option>Master</option>
+            <option>Grandmaster</option>
+            <option>Epic</option>
+            <option>Legend</option>
+            <option>Mythic</option>
+            <option>Mythical Honor</option>
+            <option> Mythical Immortal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Main Role</label>
+          <select name="role" class="form-input">
+            <option value="">Select your main role</option>
+            <option>EXP Lane</option>
+            <option>Gold Lane</option>
+            <option>Roam</option>
+            <option>Mid Lane</option>
+            <option>Jungle</option>
+            <option>Multi-role</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Bio / About Me</label>
+          <input type="text" name="bio" class="form-input" placeholder="Tell the community about yourself" />
+        </div>
+        <button type="submit" class="btn-primary form-submit">Create Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Log In</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

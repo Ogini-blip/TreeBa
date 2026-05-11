@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — TreeBa</title>
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../images/TreeBa.png" alt="TreeBa Logo" class="nav-logo-img">
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="teamfinder.html">Team Finder</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-ghost">Log In</a>
+      <a href="register.html" class="btn-primary">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="profile-page">
+
+    <!-- Profile Header -->
+    <div class="profile-header-card">
+      <div style="position:relative;flex-shrink:0;">
+        <div class="profile-big-avatar" id="profileAvatar"
+          style="cursor:pointer;overflow:hidden;"
+          onclick="document.getElementById('avatarInput').click()"
+          title="Click to change photo">
+          <img id="avatarImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;border-radius:50%;">
+          <span id="avatarInitials">?</span>
+        </div>
+        <div onclick="document.getElementById('avatarInput').click()"
+          style="position:absolute;bottom:0;right:0;background:var(--primary);color:#071a0d;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;cursor:pointer;font-weight:700;">
+          +
+        </div>
+        <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+      </div>
+      <div class="profile-info">
+        <h2 id="profileName">Your Profile</h2>
+        <div class="profile-meta">
+          <span class="profile-rank rank-epic" id="profileRank">—</span>
+          <span class="hero-tag" id="profileRole">—</span>
+          <span style="font-size:0.82rem;color:var(--text-dim);">
+            <span class="online-dot"></span>Online
+          </span>
+        </div>
+        <p class="profile-bio" id="profileBio">No bio yet.</p>
+        <div class="profile-actions">
+          <a href="community.html" class="btn-primary small">💬 World Chat</a>
+          <a href="teamfinder.html" class="btn-ghost small">🎯 Find Teammates</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Favorite Heroes -->
+    <div class="profile-section-card">
+      <h4>Favorite Heroes</h4>
+
+      <!-- Selected badges -->
+      <div id="selectedHeroes" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+        <span style="font-size:0.88rem;color:var(--text-dim);">No favorite heroes selected yet.</span>
+      </div>
+
+      <!-- Carousel -->
+      <div id="heroPicker" style="display:none;">
+        <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:10px;">Click a hero to add/remove as favorite:</p>
+
+        <div style="position:relative;display:flex;align-items:center;gap:8px;">
+          <!-- Left Arrow -->
+          <button onclick="scrollHeroes(-1)" style="
+            flex-shrink:0;width:36px;height:36px;border-radius:50%;
+            background:rgba(30,255,100,0.1);border:1px solid var(--primary);
+            color:var(--primary);font-size:1.2rem;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;">‹</button>
+
+          <!-- Hero Grid -->
+          <div id="heroGrid" style="
+            display:flex;gap:12px;flex:1;justify-content:center;
+            transition:all 0.3s ease;"></div>
+
+          <!-- Right Arrow -->
+          <button onclick="scrollHeroes(1)" style="
+            flex-shrink:0;width:36px;height:36px;border-radius:50%;
+            background:rgba(30,255,100,0.1);border:1px solid var(--primary);
+            color:var(--primary);font-size:1.2rem;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;">›</button>
+        </div>
+
+        <!-- Page indicator -->
+        <div id="pageIndicator" style="text-align:center;font-size:0.75rem;color:var(--text-dim);margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <!-- Edit Profile Note -->
+    <div class="empty-state">
+      <h3>Complete your profile</h3>
+      <p>Sign up or log in to set your rank, role, bio, and favorite heroes.</p>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:16px;">
+        <a href="register.html" class="btn-primary">Sign Up</a>
+        <a href="login.html" class="btn-ghost">Log In</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+
+    // ── Load username ──────────────────────────────────────────────────────
+    const username = sessionStorage.getItem('treeba_user');
+    if (username) {
+      document.getElementById('profileName').textContent = username;
+      document.getElementById('avatarInitials').textContent = username.slice(0, 2).toUpperCase();
+      document.querySelector('.empty-state').style.display = 'none';
+    }
+
+    // ── Avatar upload ──────────────────────────────────────────────────────
+    const avatarInput    = document.getElementById('avatarInput');
+    const avatarImg      = document.getElementById('avatarImg');
+    const avatarInitials = document.getElementById('avatarInitials');
+
+    avatarInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        avatarImg.src = e.target.result;
+        avatarImg.style.display = 'block';
+        avatarInitials.style.display = 'none';
+        sessionStorage.setItem('treeba_avatar', e.target.result);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    const savedAvatar = sessionStorage.getItem('treeba_avatar');
+    if (savedAvatar) {
+      avatarImg.src = savedAvatar;
+      avatarImg.style.display = 'block';
+      avatarInitials.style.display = 'none';
+    }
+
+    // ── Hero Picker ────────────────────────────────────────────────────────
+   const ML_HEROES = [
+  { name: "Aamon",        img: "../images/heroes/Aamon.webp" },
+  { name: "Akai",         img: "../images/heroes/Akai.webp" },
+  { name: "Aldous",       img: "../images/heroes/Aldous.webp" },
+  { name: "Alice",        img: "../images/heroes/Alice.webp" },
+  { name: "Alpha",        img: "../images/heroes/Alpha.webp" },
+  { name: "Alucard",      img: "../images/heroes/Alucard.webp" },
+  { name: "Angela",       img: "../images/heroes/Angela.webp" },
+  { name: "Arlott",       img: "../images/heroes/Arlott.webp" },
+  { name: "Atlas",        img: "../images/heroes/Atlas.webp" },
+  { name: "Aulus",        img: "../images/heroes/Aulus.webp" },
+  { name: "Aurora",       img: "../images/heroes/Aurora.webp" },
+  { name: "Badang",       img: "../images/heroes/Badang.webp" },
+  { name: "Balmond",      img: "../images/heroes/Balmond.webp" },
+  { name: "Bane",         img: "../images/heroes/Bane.webp" },
+  { name: "Barats",       img: "../images/heroes/Barats.webp" },
+  { name: "Baxia",        img: "../images/heroes/Baxia.webp" },
+  { name: "Beatrix",      img: "../images/heroes/Beatrix.webp" },
+  { name: "Belerick",     img: "../images/heroes/Belerick.webp" },
+  { name: "Benedetta",    img: "../images/heroes/Benedetta.webp" },
+  { name: "Brody",        img: "../images/heroes/Brody.webp" },
+  { name: "Bruno",        img: "../images/heroes/Bruno.webp" },
+  { name: "Carmilla",     img: "../images/heroes/Carmilla.webp" },
+  { name: "Cecilion",     img: "../images/heroes/Cecilion.webp" },
+  { name: "Chang'e",      img: "../images/heroes/Chang'e.webp" },
+  { name: "Chip",         img: "../images/heroes/Chip.webp" },
+  { name: "Chou",         img: "../images/heroes/Chou.webp" },
+  { name: "Cici",         img: "../images/heroes/Cici.webp" },
+  { name: "Claude",       img: "../images/heroes/Claude.webp" },
+  { name: "Clint",        img: "../images/heroes/Clint.webp" },
+  { name: "Cyclops",      img: "../images/heroes/Cyclops.webp" },
+  { name: "Diggie",       img: "../images/heroes/Diggie.webp" },
+  { name: "Dyrroth",      img: "../images/heroes/Dyrroth.webp" },
+  { name: "Edith",        img: "../images/heroes/Edith.webp" },
+  { name: "Esmeralda",    img: "../images/heroes/Esmeralda.webp" },
+  { name: "Estes",        img: "../images/heroes/Estes.webp" },
+  { name: "Eudora",       img: "../images/heroes/Eudora.webp" },
+  { name: "Fanny",        img: "../images/heroes/Fanny.webp" },
+  { name: "Faramis",      img: "../images/heroes/Faramis.webp" },
+  { name: "Floryn",       img: "../images/heroes/Floryn.webp" },
+  { name: "Franco",       img: "../images/heroes/Franco.webp" },
+  { name: "Fredrinn",     img: "../images/heroes/Fredrin.webp" },
+  { name: "Freya",        img: "../images/heroes/Freya.webp" },
+  { name: "Gatotkaca",    img: "../images/heroes/Gatotkaca.webp" },
+  { name: "Gloo",         img: "../images/heroes/Gloo.webp" },
+  { name: "Gord",         img: "../images/heroes/Gord.webp" },
+  { name: "Granger",      img: "../images/heroes/Granger.webp" },
+  { name: "Grock",        img: "../images/heroes/Grock.webp" },
+  { name: "Guinevere",    img: "../images/heroes/Guinevere.webp" },
+  { name: "Gusion",       img: "../images/heroes/Gusion.webp" },
+  { name: "Hanabi",       img: "../images/heroes/Hanabi.webp" },
+  { name: "Hanzo",        img: "../images/heroes/Hanzo.webp" },
+  { name: "Harith",       img: "../images/heroes/Harith.webp" },
+  { name: "Harley",       img: "../images/heroes/Harley.webp" },
+  { name: "Hayabusa",     img: "../images/heroes/Hayabusa.webp" },
+  { name: "Helcurt",      img: "../images/heroes/Helcurt.webp" },
+  { name: "Hilda",        img: "../images/heroes/Hilda.webp" },
+  { name: "Hylos",        img: "../images/heroes/Hylos.webp" },
+  { name: "Irithel",      img: "../images/heroes/Irithel.webp" },
+  { name: "Jawhead",      img: "../images/heroes/Jawhead.webp" },
+  { name: "Johnson",      img: "../images/heroes/Johnson.webp" },
+  { name: "Joy",          img: "../images/heroes/Joy.webp" },
+  { name: "Julian",       img: "../images/heroes/Julian.webp" },
+  { name: "Kadita",       img: "../images/heroes/Kadita.webp" },
+  { name: "Kagura",       img: "../images/heroes/Kagura.webp" },
+  { name: "Kaja",         img: "../images/heroes/Kaja.webp" },
+  { name: "Kalea",        img: "../images/heroes/Kalea.webp" },
+  { name: "Karina",       img: "../images/heroes/Karina.webp" },
+  { name: "Karrie",       img: "../images/heroes/Karrie.webp" },
+  { name: "Khaleed",      img: "../images/heroes/Khaleed.webp" },
+  { name: "Khufra",       img: "../images/heroes/Khufra.webp" },
+  { name: "Kimmy",        img: "../images/heroes/Kimmy.webp" },
+  { name: "Lancelot",     img: "../images/heroes/Lancelot.webp" },
+  { name: "Lapu-Lapu",    img: "../images/heroes/Lapu.webp" },
+  { name: "Layla",        img: "../images/heroes/Layla.webp" },
+  { name: "Leomord",      img: "../images/heroes/Leomord.webp" },
+  { name: "Lesley",       img: "../images/heroes/Lesley.webp" },
+  { name: "Ling",         img: "../images/heroes/Ling.webp" },
+  { name: "Lolita",       img: "../images/heroes/Lolita.webp" },
+  { name: "Lukas",        img: "../images/heroes/Lukas.webp" },
+  { name: "Lunox",        img: "../images/heroes/Lunox.webp" },
+  { name: "Luo Yi",       img: "../images/heroes/Luo Yi.webp" },
+  { name: "Lylia",        img: "../images/heroes/Lylia.webp" },
+  { name: "Marcel",       img: "../images/heroes/Marcel.webp" },
+  { name: "Martis",       img: "../images/heroes/Martis.webp" },
+  { name: "Masha",        img: "../images/heroes/MAsha.webp" },
+  { name: "Mathilda",     img: "../images/heroes/Mathilda.webp" },
+  { name: "Melissa",      img: "../images/heroes/Melissa.webp" },
+  { name: "Minotaur",     img: "../images/heroes/Minotaur.webp" },
+  { name: "Minsitthar",   img: "../images/heroes/Minsitthar.webp" },
+  { name: "Miya",         img: "../images/heroes/Miya.webp" },
+  { name: "Moskov",       img: "../images/heroes/Moskov.webp" },
+  { name: "Nana",         img: "../images/heroes/Nana.webp" },
+  { name: "Natalia",      img: "../images/heroes/Natalia.webp" },
+  { name: "Natan",        img: "../images/heroes/Natan.webp" },
+  { name: "Nolan",        img: "../images/heroes/Nolan.webp" },
+  { name: "Novaria",      img: "../images/heroes/Novaria.webp" },
+  { name: "Odette",       img: "../images/heroes/Odette.webp" },
+  { name: "Paquito",      img: "../images/heroes/Paquito.webp" },
+  { name: "Pharsa",       img: "../images/heroes/Pharsa.webp" },
+  { name: "Phoveus",      img: "../images/heroes/Phoveus.webp" },
+  { name: "Popol & Kupa", img: "../images/heroes/Popol and Kupa.webp" },
+  { name: "Rafaela",      img: "../images/heroes/Rafaela.webp" },
+  { name: "Roger",        img: "../images/heroes/Roger.webp" },
+  { name: "Ruby",         img: "../images/heroes/Ruby.webp" },
+  { name: "Saber",        img: "../images/heroes/Saber.webp" },
+  { name: "Selena",       img: "../images/heroes/Selena.webp" },
+  { name: "Silvanna",     img: "../images/heroes/Silvanna.webp" },
+  { name: "Sora",         img: "../images/heroes/Sora.webp" },
+  { name: "Sun",          img: "../images/heroes/Sun.webp" },
+  { name: "Suyou",        img: "../images/heroes/Suyou.webp" },
+  { name: "Terizla",      img: "../images/heroes/Terizla.webp" },
+  { name: "Thamuz",       img: "../images/heroes/Thamuz.webp" },
+  { name: "Tigreal",      img: "../images/heroes/Tigreal.webp" },
+  { name: "Uranus",       img: "../images/heroes/Uranus.webp" },
+  { name: "Vale",         img: "../images/heroes/Vale.webp" },
+  { name: "Valentina",    img: "../images/heroes/Valentina.webp" },
+  { name: "Valir",        img: "../images/heroes/Valir.webp" },
+  { name: "Vexana",       img: "../images/heroes/Vexanna.webp" },
+  { name: "Wanwan",       img: "../images/heroes/Wanwan.webp" },
+  { name: "X.Borg",       img: "../images/heroes/X.borg.webp" },
+  { name: "Xavier",       img: "../images/heroes/Xavier.webp" },
+  { name: "Yi Sun-shin",  img: "../images/heroes/Yi Sun-shin.webp" },
+  { name: "Yin",          img: "../images/heroes/Yin.webp" },
+  { name: "Yu Zhong",     img: "../images/heroes/Yu Zhong.webp" },
+  { name: "Yve",          img: "../images/heroes/Yve.webp" },
+  { name: "Zetian",       img: "../images/heroes/Zetian.webp" },
+  { name: "Zhask",        img: "../images/heroes/Zhask.webp" },
+  { name: "Zhuxin",       img: "../images/heroes/Zhuxin.webp" },
+  { name: "Zilong",       img: "../images/heroes/Zilong.webp" },
+];
+    let selectedHeroes = JSON.parse(sessionStorage.getItem('treeba_heroes') || '[]');
+    let currentPage = 0;
+    const heroesPerPage = 6;
+
+    function scrollHeroes(direction) {
+      const maxPage = Math.ceil(ML_HEROES.length / heroesPerPage) - 1;
+      currentPage = Math.min(Math.max(currentPage + direction, 0), maxPage);
+      renderHeroPicker();
+    }
+
+    function renderHeroPicker() {
+      const grid        = document.getElementById('heroGrid');
+      const selectedDiv = document.getElementById('selectedHeroes');
+      const indicator   = document.getElementById('pageIndicator');
+      if (!grid) return;
+
+      // Slice heroes for current page
+      const start      = currentPage * heroesPerPage;
+      const pageHeroes = ML_HEROES.slice(start, start + heroesPerPage);
+
+      grid.innerHTML = '';
+      pageHeroes.forEach(hero => {
+        const isSelected = selectedHeroes.includes(hero.name);
+        const card = document.createElement('div');
+        card.style.cssText = `
+          display:flex;flex-direction:column;align-items:center;gap:6px;
+          cursor:pointer;padding:10px;border-radius:12px;transition:all 0.2s;
+          border:2px solid ${isSelected ? 'var(--primary)' : 'transparent'};
+          background:${isSelected ? 'rgba(30,255,100,0.08)' : 'rgba(255,255,255,0.03)'};
+          min-width:80px;flex-shrink:0;
+        `;
+        card.innerHTML = `
+          <img src="${hero.img}" alt="${hero.name}"
+            style="width:60px;height:60px;border-radius:50%;object-fit:cover;
+            border:2px solid ${isSelected ? 'var(--primary)' : '#333'};"
+            onerror="this.style.background='#1a3320';">
+          <span style="font-size:0.72rem;text-align:center;
+            color:${isSelected ? 'var(--primary)' : 'var(--text-dim)'};">
+            ${hero.name}
+          </span>
+        `;
+        card.addEventListener('click', () => {
+          if (selectedHeroes.includes(hero.name)) {
+            selectedHeroes = selectedHeroes.filter(h => h !== hero.name);
+          } else {
+            selectedHeroes.push(hero.name);
+          }
+          sessionStorage.setItem('treeba_heroes', JSON.stringify(selectedHeroes));
+          renderHeroPicker();
+        });
+        grid.appendChild(card);
+      });
+
+      // Update page indicator
+      const maxPage = Math.ceil(ML_HEROES.length / heroesPerPage);
+      indicator.textContent = `Page ${currentPage + 1} of ${maxPage}`;
+
+      // Render selected badges
+      const badges = selectedHeroes.map(name => {
+        const hero = ML_HEROES.find(h => h.name === name);
+        return `
+          <span style="
+            display:inline-flex;align-items:center;gap:6px;
+            background:rgba(30,255,100,0.12);border:1px solid var(--primary);
+            border-radius:20px;padding:4px 10px 4px 4px;font-size:0.8rem;color:var(--primary);">
+            <img src="${hero?.img}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">
+            ${name}
+          </span>`;
+      }).join('');
+
+      selectedDiv.innerHTML = badges || '<span style="font-size:0.88rem;color:var(--text-dim);">No favorite heroes selected yet.</span>';
+    }
+
+    // Only show picker if logged in
+    if (sessionStorage.getItem('treeba_user')) {
+      document.getElementById('heroPicker').style.display = 'block';
+    }
+    renderHeroPicker();
+
+  </script>
+</body>
+</html>
