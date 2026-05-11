@@ -361,6 +361,13 @@ select.form-input option { background: var(--bg-card); }
 .profile-info { flex: 1; }
 .profile-info h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
 .profile-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.profile-rank-container, .profile-role-container { display: flex; align-items: center; gap: 6px; }
+.edit-btn {
+  background: none; border: none; color: var(--text-dim); cursor: pointer;
+  font-size: 0.7rem; padding: 2px; border-radius: 4px; transition: all 0.2s;
+  opacity: 0.7;
+}
+.edit-btn:hover { color: var(--primary); opacity: 1; background: rgba(30, 255, 100, 0.1); }
 .profile-bio { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
 .online-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); margin-right: 4px; animation: pulse 2s infinite; }
 .profile-actions { display: flex; gap: 10px; margin-top: 16px; }
@@ -394,13 +401,116 @@ select.form-input option { background: var(--bg-card); }
   .hero-content { grid-template-columns: 1fr; }
   .hero-big-image { display: none; }
 }
+
 @media (max-width: 768px) {
-  .navbar { padding: 0 20px; }
+  .navbar { padding: 0 16px; height: 56px; }
   .nav-links { display: none; }
-  .section { padding: 60px 20px; }
+  .nav-actions { gap: 6px; }
+  .btn-primary.small, .btn-ghost.small { padding: 4px 10px; font-size: 0.75rem; }
+  .section { padding: 40px 16px; }
   .profiles-grid { grid-template-columns: 1fr; }
   .heroes-carousel { grid-template-columns: 1fr; }
   .footer-top { flex-direction: column; gap: 32px; }
   .footer-links { gap: 28px; }
-  .profile-header-card { flex-direction: column; }
+  
+  /* Profile Page Mobile */
+  .profile-page { padding: 80px 16px 40px; }
+  .profile-header-card { flex-direction: column; padding: 20px; gap: 16px; align-items: center; text-align: center; }
+  .profile-info { text-align: center; }
+  .profile-info h2 { font-size: 1.3rem; }
+  .profile-meta { justify-content: center; }
+  .profile-rank-container, .profile-role-container { gap: 4px; }
+  .edit-btn { font-size: 0.6rem; padding: 1px; }
+  .profile-actions { flex-wrap: wrap; justify-content: center; }
+  .profile-section-card { padding: 16px; margin-bottom: 12px; }
+  
+  /* Hero Picker Mobile */
+  #heroGrid { gap: 8px; }
+}
+
+@media (max-width: 576px) {
+  body { font-size: 15px; }
+  .navbar { padding: 0 12px; height: 52px; }
+  .nav-logo-img { height: 28px; }
+  .nav-actions { gap: 4px; }
+  .btn-primary, .btn-ghost, .btn-outline { padding: 8px 14px; font-size: 0.8rem; }
+  .btn-primary.small, .btn-ghost.small { padding: 3px 8px; font-size: 0.7rem; }
+  
+  .hero-section { padding: 70px 16px 40px; }
+  .hero-text h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); }
+  .hero-sub { font-size: 0.95rem; }
+  
+  .section { padding: 30px 16px; }
+  .section-header h2 { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+  
+  .profile-page { padding: 70px 12px 30px; max-width: 100%; }
+  .profile-header-card { padding: 14px; gap: 12px; }
+  .profile-big-avatar { width: 70px; height: 70px; font-size: 1.8rem; }
+  .profile-info h2 { font-size: 1.15rem; }
+  .profile-info p { font-size: 0.8rem; }
+  
+  .profile-section-card { padding: 12px; }
+  .profile-section-card h4 { font-size: 0.7rem; margin-bottom: 10px; }
+  
+  /* Hero Picker for mobile */
+  #heroGrid { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  
+  /* Profile Actions Stack */
+  .profile-actions { gap: 6px; }
+  .profile-actions a { flex: 1; min-width: 120px; text-align: center; }
+  
+  .auth-card { padding: 24px; }
+  .auth-card h2 { font-size: 1.4rem; }
+  .form-submit { font-size: 0.9rem; }
+  
+  .chat-box { height: 400px; }
+  .empty-state { padding: 40px 16px; }
+  .empty-state h3 { font-size: 1rem; }
+  
+  .feed-post { padding: 14px; gap: 12px; flex-direction: column; }
+  .feed-vote { flex-direction: row; gap: 4px; min-width: auto; }
+  
+  .hero-knowledge-card { }
+  .hkc-hero-img { height: 120px; }
+  .hkc-body { padding: 12px; gap: 6px; }
+  .hero-knowledge-card h3 { font-size: 0.95rem; }
+  .hero-knowledge-card p { font-size: 0.8rem; }
+}
+
+@media (max-width: 480px) {
+  .navbar { padding: 0 10px; }
+  .nav-logo { font-size: 1.1rem; }
+  .nav-logo-img { height: 24px; }
+  
+  .btn-primary, .btn-ghost { padding: 6px 12px; font-size: 0.75rem; }
+  
+  .profile-page { padding: 60px 10px 20px; }
+  .profile-header-card { padding: 10px; gap: 8px; }
+  .profile-big-avatar { width: 60px; height: 60px; font-size: 1.5rem; border-width: 2px; }
+  .profile-info h2 { font-size: 1rem; margin-bottom: 4px; }
+  .profile-meta { gap: 6px; margin-bottom: 8px; }  .profile-rank-container, .profile-role-container { gap: 2px; }
+  .edit-btn { font-size: 0.5rem; padding: 0; }  .profile-rank-container, .profile-role-container { gap: 3px; }
+  .edit-btn { font-size: 0.55rem; padding: 1px; }
+  .profile-bio { font-size: 0.75rem; }
+  
+  .profile-section-card { padding: 10px; margin-bottom: 8px; }
+  
+  .auth-page { padding: 60px 12px; }
+  .auth-card { padding: 16px; }
+  .auth-card h2 { font-size: 1.2rem; margin-bottom: 4px; }
+  .auth-card p { font-size: 0.8rem; margin-bottom: 16px; }
+  
+  .form-group { margin-bottom: 12px; gap: 4px; }
+  .form-group label { font-size: 0.75rem; }
+  .form-input { padding: 8px 10px; font-size: 0.85rem; }
+  
+  .chat-box { height: 350px; }
+  .chat-header { padding: 12px 14px; }
+  .chat-messages { padding: 12px 14px; gap: 8px; }
+  .chat-input-row { padding: 8px 12px; gap: 6px; }
+  .chat-input { padding: 6px 10px; font-size: 0.85rem; }
+  
+  .empty-state { padding: 30px 12px; }
+  .empty-state h3 { font-size: 0.95rem; margin-bottom: 4px; }
+  .empty-state p { font-size: 0.75rem; }
 }

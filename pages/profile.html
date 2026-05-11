@@ -46,8 +46,14 @@
       <div class="profile-info">
         <h2 id="profileName">Your Profile</h2>
         <div class="profile-meta">
-          <span class="profile-rank rank-epic" id="profileRank">—</span>
-          <span class="hero-tag" id="profileRole">—</span>
+          <div class="profile-rank-container">
+            <span class="profile-rank rank-epic" id="profileRank">—</span>
+            <button id="editRankBtn" class="edit-btn" title="Edit rank" style="display:none;">✏️</button>
+          </div>
+          <div class="profile-role-container">
+            <span class="hero-tag" id="profileRole">—</span>
+            <button id="editRoleBtn" class="edit-btn" title="Edit role" style="display:none;">✏️</button>
+          </div>
           <span style="font-size:0.82rem;color:var(--text-dim);">
             <span class="online-dot"></span>Online
           </span>
@@ -75,23 +81,26 @@
 
         <div style="position:relative;display:flex;align-items:center;gap:8px;">
           <!-- Left Arrow -->
-          <button onclick="scrollHeroes(-1)" style="
+          <button id="scrollLeftBtn" onclick="scrollHeroes(-1)" style="
             flex-shrink:0;width:36px;height:36px;border-radius:50%;
             background:rgba(30,255,100,0.1);border:1px solid var(--primary);
             color:var(--primary);font-size:1.2rem;cursor:pointer;
-            display:flex;align-items:center;justify-content:center;">‹</button>
+            display:flex;align-items:center;justify-content:center;
+            transition:all 0.2s;">‹</button>
 
           <!-- Hero Grid -->
           <div id="heroGrid" style="
             display:flex;gap:12px;flex:1;justify-content:center;
-            transition:all 0.3s ease;"></div>
+            transition:all 0.3s ease;overflow-x:auto;-webkit-overflow-scrolling:touch;
+            padding:4px 0;"></div>
 
           <!-- Right Arrow -->
-          <button onclick="scrollHeroes(1)" style="
+          <button id="scrollRightBtn" onclick="scrollHeroes(1)" style="
             flex-shrink:0;width:36px;height:36px;border-radius:50%;
             background:rgba(30,255,100,0.1);border:1px solid var(--primary);
             color:var(--primary);font-size:1.2rem;cursor:pointer;
-            display:flex;align-items:center;justify-content:center;">›</button>
+            display:flex;align-items:center;justify-content:center;
+            transition:all 0.2s;">›</button>
         </div>
 
         <!-- Page indicator -->
@@ -120,6 +129,22 @@
       document.getElementById('profileName').textContent = username;
       document.getElementById('avatarInitials').textContent = username.slice(0, 2).toUpperCase();
       document.querySelector('.empty-state').style.display = 'none';
+      
+      // Show edit buttons when logged in
+      editRankBtn.style.display = 'inline-flex';
+      editRoleBtn.style.display = 'inline-flex';
+      
+      // Load saved rank and role
+      const savedRank = sessionStorage.getItem('treeba_rank');
+      if (savedRank) {
+        profileRank.textContent = savedRank;
+        profileRank.className = `profile-rank ${getRankClass(savedRank)}`;
+      }
+      
+      const savedRole = sessionStorage.getItem('treeba_role');
+      if (savedRole) {
+        profileRole.textContent = savedRole;
+      }
     }
 
     // ── Avatar upload ──────────────────────────────────────────────────────
@@ -146,6 +171,88 @@
       avatarImg.style.display = 'block';
       avatarInitials.style.display = 'none';
     }
+
+    // ── Rank and Role Editing ──────────────────────────────────────────────────
+    const editRankBtn = document.getElementById('editRankBtn');
+    const editRoleBtn = document.getElementById('editRoleBtn');
+    const profileRank = document.getElementById('profileRank');
+    const profileRole = document.getElementById('profileRole');
+
+    const RANKS = [
+      'Warrior', 'Elite', 'Master', 'Grandmaster', 'Epic', 'Legend', 'Mythic',
+      'Mythical Honor', 'Mythical Glory', 'Mythical Immortal'
+    ];
+
+    const ROLES = [
+      'EXP Lane', 'Gold Lane', 'Roam', 'Mid Lane', 'Jungle', 'Multi-role'
+    ];
+
+    function getRankClass(rank) {
+      if (rank.includes('Mythic')) return 'rank-mythic';
+      if (rank.includes('Legend')) return 'rank-legend';
+      if (rank.includes('Epic')) return 'rank-epic';
+      return 'rank-epic'; // default
+    }
+
+    function createSelect(options, currentValue, onChange) {
+      const select = document.createElement('select');
+      select.className = 'form-input';
+      select.style.cssText = 'font-size:0.75rem;padding:4px 8px;width:auto;min-width:120px;';
+      
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = 'Select...';
+      select.appendChild(defaultOption);
+      
+      options.forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option;
+        opt.textContent = option;
+        if (option === currentValue) opt.selected = true;
+        select.appendChild(opt);
+      });
+      
+      select.addEventListener('change', () => {
+        onChange(select.value);
+        select.remove();
+      });
+      
+      select.addEventListener('blur', () => {
+        select.remove();
+      });
+      
+      return select;
+    }
+
+    function editRank() {
+      const currentRank = profileRank.textContent === '—' ? '' : profileRank.textContent;
+      const select = createSelect(RANKS, currentRank, (newRank) => {
+        if (newRank) {
+          profileRank.textContent = newRank;
+          profileRank.className = `profile-rank ${getRankClass(newRank)}`;
+          sessionStorage.setItem('treeba_rank', newRank);
+        }
+      });
+      
+      profileRank.parentNode.insertBefore(select, profileRank.nextSibling);
+      select.focus();
+    }
+
+    function editRole() {
+      const currentRole = profileRole.textContent === '—' ? '' : profileRole.textContent;
+      const select = createSelect(ROLES, currentRole, (newRole) => {
+        if (newRole) {
+          profileRole.textContent = newRole;
+          sessionStorage.setItem('treeba_role', newRole);
+        }
+      });
+      
+      profileRole.parentNode.insertBefore(select, profileRole.nextSibling);
+      select.focus();
+    }
+
+    editRankBtn.addEventListener('click', editRank);
+    editRoleBtn.addEventListener('click', editRole);
 
     // ── Hero Picker ────────────────────────────────────────────────────────
    const ML_HEROES = [
@@ -281,7 +388,15 @@
 ];
     let selectedHeroes = JSON.parse(sessionStorage.getItem('treeba_heroes') || '[]');
     let currentPage = 0;
-    const heroesPerPage = 6;
+    
+    // Responsive heroes per page
+    function getHeroesPerPage() {
+      if (window.innerWidth <= 480) return 3;
+      if (window.innerWidth <= 576) return 4;
+      if (window.innerWidth <= 768) return 5;
+      return 6;
+    }
+    let heroesPerPage = getHeroesPerPage();
 
     function scrollHeroes(direction) {
       const maxPage = Math.ceil(ML_HEROES.length / heroesPerPage) - 1;
@@ -289,11 +404,28 @@
       renderHeroPicker();
     }
 
+    // Handle window resize to adjust heroes per page
+    window.addEventListener('resize', () => {
+      const newHeroesPerPage = getHeroesPerPage();
+      if (newHeroesPerPage !== heroesPerPage) {
+        heroesPerPage = newHeroesPerPage;
+        currentPage = 0;
+        renderHeroPicker();
+      }
+      updateArrowButtons();
+    });
+
     function renderHeroPicker() {
       const grid        = document.getElementById('heroGrid');
       const selectedDiv = document.getElementById('selectedHeroes');
       const indicator   = document.getElementById('pageIndicator');
       if (!grid) return;
+
+      // Get responsive hero card size
+      let cardSize = 80;
+      if (window.innerWidth <= 480) cardSize = 60;
+      else if (window.innerWidth <= 576) cardSize = 65;
+      else if (window.innerWidth <= 768) cardSize = 70;
 
       // Slice heroes for current page
       const start      = currentPage * heroesPerPage;
@@ -305,17 +437,17 @@
         const card = document.createElement('div');
         card.style.cssText = `
           display:flex;flex-direction:column;align-items:center;gap:6px;
-          cursor:pointer;padding:10px;border-radius:12px;transition:all 0.2s;
+          cursor:pointer;padding:8px;border-radius:12px;transition:all 0.2s;
           border:2px solid ${isSelected ? 'var(--primary)' : 'transparent'};
           background:${isSelected ? 'rgba(30,255,100,0.08)' : 'rgba(255,255,255,0.03)'};
-          min-width:80px;flex-shrink:0;
+          min-width:${cardSize + 16}px;flex-shrink:0;
         `;
         card.innerHTML = `
           <img src="${hero.img}" alt="${hero.name}"
-            style="width:60px;height:60px;border-radius:50%;object-fit:cover;
+            style="width:${cardSize}px;height:${cardSize}px;border-radius:50%;object-fit:cover;
             border:2px solid ${isSelected ? 'var(--primary)' : '#333'};"
             onerror="this.style.background='#1a3320';">
-          <span style="font-size:0.72rem;text-align:center;
+          <span style="font-size:0.65rem;text-align:center;word-break:break-word;width:${cardSize}px;
             color:${isSelected ? 'var(--primary)' : 'var(--text-dim)'};">
             ${hero.name}
           </span>
@@ -335,6 +467,8 @@
       // Update page indicator
       const maxPage = Math.ceil(ML_HEROES.length / heroesPerPage);
       indicator.textContent = `Page ${currentPage + 1} of ${maxPage}`;
+      
+      updateArrowButtons();
 
       // Render selected badges
       const badges = selectedHeroes.map(name => {
@@ -350,6 +484,15 @@
       }).join('');
 
       selectedDiv.innerHTML = badges || '<span style="font-size:0.88rem;color:var(--text-dim);">No favorite heroes selected yet.</span>';
+    }
+
+    function updateArrowButtons() {
+      const maxPage = Math.ceil(ML_HEROES.length / heroesPerPage) - 1;
+      const leftBtn = document.getElementById('scrollLeftBtn');
+      const rightBtn = document.getElementById('scrollRightBtn');
+      
+      if (leftBtn) leftBtn.style.opacity = currentPage === 0 ? '0.5' : '1';
+      if (rightBtn) rightBtn.style.opacity = currentPage === maxPage ? '0.5' : '1';
     }
 
     // Only show picker if logged in
